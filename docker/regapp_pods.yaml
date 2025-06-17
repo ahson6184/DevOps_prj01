@@ -1,0 +1,12 @@
+---
+- hosts: openstack
+  tasks:
+    - name: Deploy the regapp service using pods
+      command: kubectl apply -f regapp.yaml
+      args:
+        chdir: /home/ubuntu/  
+      
+    - name: Deploy the regapp service using pods
+      command: kubectl rollout restart deployment.apps/regapp-svc
+
+    

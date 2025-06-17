@@ -1,0 +1,36 @@
+---
+- hosts: localhost
+  become: false
+  tasks:
+    - name: Remove existing container (if any)
+      community.docker.docker_container:
+        name: regapp
+        state: absent
+        force_kill: true
+      ignore_errors: true  
+
+    - name: Remove existing image (if any)
+      community.docker.docker_image:
+        name: ahsanhabibsonar/regapp
+        tag: latest
+        state: absent
+        force_absent: true
+      ignore_errors: true  
+  
+    - name: Log into Docker Hub
+      community.docker.docker_login:
+      # Enter your username and password here
+
+    - name: Create a docker image
+      community.docker.docker_image:
+        build:
+          path: /home/ahsanhabib/docker
+          dockerfile: Dockerfile
+          nocache: true  # Force fresh build
+          pull: true    # Always pull base image
+        name: ahsanhabibsonar/regapp
+        tag: "latest"  # Unique tag
+        push: true
+        source: build
+        force_tag: true  # Overwrite existing tags
+

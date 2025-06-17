@@ -1,0 +1,25 @@
+---
+- hosts: k8-02
+  become: false
+  tasks:
+    - name: Create container using updated tomcat image
+      tags: build
+      community.docker.docker_container:
+        name: regapp-server
+        image: ahsanhabibsonar/regapp
+        pull: true
+        ports:
+         # Publish container port 8080 as host port 8888
+          - "8888:8080"
+        recreate: true
+        state: started
+        restart_policy: always
+        detach: true 
+
+#    - name: Install docker-sdk
+#      ansible.builtin.apt:  # For Debian/Ubuntu
+#        name: python3-docker
+#        state: present
+#      when: ansible_facts['pkg_mgr'] == 'apt'
+
+
